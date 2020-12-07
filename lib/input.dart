@@ -1,3 +1,4 @@
+import 'package:FruitBasket/services/twilio/twilioService.dart';
 import "package:flutter/material.dart";
 
 import 'utils/constants.dart';
@@ -9,6 +10,7 @@ class Input extends StatefulWidget {
 
 class _InputState extends State<Input> {
   TextEditingController etUsername = TextEditingController();
+  final twilioService = TwilioService();
 
   String nUsername;
 
@@ -65,9 +67,12 @@ class _InputState extends State<Input> {
                           setState(() {
                             nUsername = etUsername.text;
                           });
+                          twilioService.sendSMS(
+                              "Hello $nUsername, someone has gratitude for you and has sent you a virtual fruit basket!",
+                              "+506 60499858");
                           Navigator.pushNamed(context, "canvaspage");
                         },
-                        color: Colors.orange,
+                        color: Colors.black,
                         textColor: Colors.white,
                         child: Text('Submit'),
                       ),
