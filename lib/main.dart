@@ -2,7 +2,6 @@ import 'package:FruitBasket/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "widgets/canvas.dart";
-import "package:FruitBasket/input.dart";
 
 Future<void> main() async {
   await DotEnv().load('.env');
