@@ -1,9 +1,11 @@
+import 'package:FruitBasket/services/twilio/twilioService.dart';
 import 'package:FruitBasket/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import "widgets/canvas.dart";
-import "package:FruitBasket/input.dart";
 
-void main() {
+Future<void> main() async {
+  await DotEnv().load('.env');
   runApp(FruitBasket());
 }
 
@@ -18,6 +20,7 @@ class _FruitBasketState extends State<FruitBasket> {
   TextEditingController etUsername = TextEditingController();
   Canvas canvas = Canvas();
   String nUsername = "";
+  final twilioService = TwilioService();
 
   @override
   Widget build(BuildContext context) {
@@ -67,26 +70,30 @@ class _FruitBasketState extends State<FruitBasket> {
                             hintText: 'Maria, Joseph, Daniel, Richard, etc...'),
                       ),
                       Container(
+                        padding: EdgeInsets.symmetric(vertical: 20),
                         alignment: Alignment.centerRight,
-                        child: MaterialButton(
-                          onPressed: () {
-                            setState(() {
-                              nUsername = etUsername.text;
-                            });
-                            Navigator.pushNamed(context, "canvaspage");
-                          },
-                          color: Colors.orange,
-                          textColor: Colors.white,
-                          child: Text('Submit'),
+                        child: Center(
+                          child: MaterialButton(
+                            onPressed: () {
+                              setState(() {
+                                nUsername = etUsername.text;
+                              });
+                              twilioService.sendSMS(
+                                  "Hello $nUsername, someone has gratitude for you and has sent you a virtual fruit basket!",
+                                  "+506 60499858");
+                              Navigator.pushNamed(context, "canvaspage");
+                            },
+                            color: Colors.pink[300],
+                            textColor: Colors.white,
+                            child: Text('Submit'),
+                          ),
                         ),
                       ),
                       Container(
-                        alignment: Alignment.bottomCenter,
-                        padding: EdgeInsets.only(left: 120.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text("Thank you " + nUsername),
-                          ],
+                        child: Text(
+                          "Thank you $nUsername",
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w900),
                         ),
                       ),
                     ],
